@@ -1,0 +1,58 @@
+<%- include('partials/header.ejs') %>
+<body>
+
+
+<div class="col-md-6 col-md-push-6">
+        
+   <div class="col-md-10" style="margin:10% 0px;">
+      <% if (message) { %>
+       <div class="alert alert-info" role="alert"><%= message %></div>
+      <% } %>
+   
+       <form action="" method="post" onsubmit="return signupvalidation()">
+         <span>Име:</span>
+         <div class="form-group" id="name-group">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Внеси го твоето име" onkeyup="convertName()" autocomplete="off" />
+            <div id="name-feedback"></div>
+         </div>
+         <span>Презиме:</span>
+         <div class="form-group" id="surname-group">
+            <label class="sr-only" for="surname">Презиме:</label>
+            <input type="text" class="form-control" id="surname" name="surname" placeholder="Внеси го твоето презиме" onkeyup="convertPrezime()" autocomplete="off" />
+            <div id="surname-feedback"></div>
+         </div>
+         <span>Е-маил:</span>
+         <div class="form-group" id="email-group">
+            <label class="sr-only" for="email">Е-маил:</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Внеси ја твојата е-маил адреса" autocomplete="off" />
+            <div id="email-feedback"></div>
+         </div>
+         <span>Корисничко име:</span>
+         <div class="form-group" id="username-group">
+            <label class="sr-only" for="username">Корисничко име:</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Внеси корисничко име" autocomplete="off"/>
+            <div id="username-feedback"></div>
+         </div>
+         <span>Лозинка:</span>
+         <div class="form-group" id="password-group">
+            <label class="sr-only" for="password">Корисничко име:</label>
+            <input type="text" class="form-control" id="password" name="password" placeholder="Внеси лозинка" autocomplete="off" />
+            <div id="password-feedback"></div>
+         </div>
+
+         <div class="row">
+            <div class="col-sm-6 col-md-12 col-lg-6">
+            <input type="submit" class="btn btn-default btn-block" value="Креирај Профил" /></div>
+            <div class="col-sm-6 col-md-12 col-lg-6">
+            <a href="/" class="btn btn-default btn-block">Врати се назад</a></div>
+        </div>
+         
+      </form>
+      </div>
+      
+</div> 
+<div class="col-md-6 fixed-lefts hidden-xs hidden-sm" style="background-image:url('public/images/background-reverse.png'); background-attachment: fixed; background-size: cover;" align="center">
+      <div style="height:200px"></div>
+   </div>
+
+<%- include('partials/footer.ejs') %>

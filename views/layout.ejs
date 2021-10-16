@@ -1,0 +1,311 @@
+<%- include('partials/header.ejs') %>
+<body onload="product_charts()">
+
+        <div class="col-md-3 fixed-left" style="background:#2c3e50; padding-top:50px;" align="center">
+                <img src="/public/images/user.png" class="img-responsive" />
+                <br/>
+                <h4 style="color:#fff">Корисник:</h4>
+                <h3 style="color:#ececec"><%= user.name+" "+user.surname %></h3>
+                <br/>
+                <h4 style="color:#fff">Е-маил:</h4>
+                <h4 style="color:#ececec"><%= user.email %></h4>
+        <a href="/logout" class="btn btn-defaults" style="margin:30px;">Одјави се</a>        
+        </div>
+        
+        
+        <div class="col-md-9 col-md-push-3" style="padding:20px;">
+        <% if (message) { %>
+        <div class="alert alert-info alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <%= message %>
+        </div>
+        <% } %>
+        <form id="search_data" onsubmit="return false;">
+        <div class="input-group">
+          <div class="form-group" id="search-group">
+          <input type="text" id="search-term" class="form-control" name="search-term" onkeyup="convertInput()">
+          </div>
+          <div class="input-group-btn">
+            <!-- Button and dropdown menu -->
+            <button type="button" class="btn btn-default dropdown-toggle" id="radioButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li> <div class="radio" style="padding-left:15px;"><label><input type="radio" name="optionsRadios" value="name" id="search-produkt"> Продукт</label></div></li>
+                <li role="separator" class="divider"></li>
+                <li> <div class="radio" style="padding-left:15px;"><label><input type="radio" name="optionsRadios" value="prodavnica" id="search-prodavnica"> Продавница</label></div></li>
+                <li role="separator" class="divider"></li>
+                <li> <div class="radio" style="padding-left:15px;"><label><input type="radio" name="optionsRadios" value="grad" id="search-grad"> Град</label></div></li>
+              </ul>
+            <button type=button class="btn btn-default" onclick="search_data()">Пребарувај</button>
+          </div>
+        </div>
+        </form>
+        <br/>
+        <div id="search-results"></div>
+        
+        <div class="panel panel-default">
+        
+        <div class="panel-heading"><h4><i class="fa fa-shopping-bag"></i> Додади нов производ</h4></div>
+
+        <div class="panel-body">
+
+
+        <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Drag and Drop</a></li>
+          <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Image Upload</a></li>
+          <!--<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Live Stream</a></li>-->
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="home">
+          
+              <div id="proba-div">
+                  <!-- Drop Zone -->
+                  <h4>Drag and drop files below</h4>
+                    <div class="upload-drop-zone" id="drop-zone" ondrop="event.stopPropagation(); event.preventDefault();dodrop(event,'<%= user.username %>')" ondragover="dragover(event)" ondragleave="dragleave(event)">
+                      Just drag and drop files here
+                  </div>  
+              </div>
+          
+          </div>
+          <div role="tabpanel" class="tab-pane" id="profile">
+            
+            <div id="upload-div">
+              <h4>Select files from your computer</h4>
+                <form action="" method="post" enctype="multipart/form-data" id="js-upload-form" onsubmit="my_ajax_function('<%= user.username %>'); return false;">
+                      <div class="form-group">
+                      <input type="file" name="files" id="js-upload-files" autocomplete="off">
+                      </div>
+                    <button type="submit" class="btn btn-default" id="js-upload-submit">Upload files</button>
+                </form>
+      
+              </div>
+            
+          </div>
+          <!--
+          <div role="tabpanel" class="tab-pane" id="messages">
+            
+            <div id="change-button">
+            <h4>Click button to start live streaming.</h4>
+            <button onclick="live_stream_function('<%= user.username %>');" class="btn btn-default">Start Live Streaming</button></div>
+            <div id="proba-video-stream" style="margin:20px 0px"></div>
+          </div>-->
+        </div>
+
+        </div>
+
+
+        
+        
+        
+        
+        
+        
+          </div>
+        </div>
+      
+          
+        
+        <div class="panel panel-default">
+          <div class="panel-heading">
+          <h4><i class="fa fa-shopping-basket"></i> Твоите производи</h4>
+          </div>
+        
+        <% if((currentPage <= maxPage) || maxPage===0){ %>
+        
+        
+          <% if (products.length>0) { %>
+          
+          <div class="panel-body">
+            
+          <div class="table-responsive">
+           <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                    <th></th>
+                    <th>Производ</th>
+                    <th>Продавница</th>
+                    <th>Град</th>
+                    <th>Цена</th>
+                    <th>Датум</th>
+                    <th class="text-center">Опции</th>
+                </tr>
+              </thead>
+          
+          
+          <% if (currentPage != maxPage){ %>
+          
+            <% for(var i=(currentPage-1)*5; i < (currentPage*5); i++) { %>
+          
+              <tr>
+                <td><%= i+1 %></td>
+                <td><%= products[i].name %></td>
+                <td><%= products[i].prodavnica %></td>
+                <td><%= products[i].grad %></td>
+                <td><%= products[i].cena.toFixed(2) %> МКД</td>
+                <td><%= products[i].date.getDate()%>/<%=  products[i].date.getMonth()+1 %>/<%=  products[i].date.getFullYear() %></td>
+                <td class="text-center">
+                  <a href="/products/item/<%= products[i]._id %>" class="btn btn-primary btn-xs"><i class="fa fa-search"></i> Види</a>
+                  <a href="/products/remove/<%= products[i]._id %>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+              
+            <% } %>
+          <% }else{ %>
+          
+            <% for(var i=(currentPage-1)*5; i < products.length; i++) { %>
+          
+              <tr>
+                <td><%= i+1 %></td>
+                <td><%= products[i].name %></td>
+                <td><%= products[i].prodavnica %></td>
+                <td><%= products[i].grad %></td>
+                <td><%= products[i].cena.toFixed(2) %> МКД</td>
+                <td><%= products[i].date.getDate()%>/<%=  products[i].date.getMonth()+1 %>/<%=  products[i].date.getFullYear() %></td>
+                <td class="text-center">
+                  <a href="/products/item/<%= products[i]._id %>" class="btn btn-primary btn-xs"><i class="fa fa-search"></i> Види</a>
+                  <a href="/products/remove/<%= products[i]._id %>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+              
+            <% } %>
+          <% } %>
+          
+          </table>
+          </div>
+          </div>
+          
+          <% if (maxPage >1){ %>
+          
+          <div class="panel-footer">
+          <nav>
+            <ul class="pagination">
+              
+            <% if (currentPage == 1){  %>
+                <li class="active"><a href="/products/<%= currentPage %>"><%= currentPage %></a></li>
+                <li><a href="/products/<%= parseInt(currentPage)+1 %>"><%= parseInt(currentPage)+1 %></a></li>
+                <li>
+                  <a href="/products/<%= maxPage %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+            <% } else if (currentPage == maxPage){  %>
+                <li>
+                  <a href="/products/<%= maxPage - (maxPage-1) %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li ><a href="/products/<%= maxPage-1 %>"><%= maxPage-1 %></a></li>
+                <li class="active"><a href="/products/<%= maxPage %>"><%= maxPage %></a></li>
+            <% }else{ %>
+                <li>
+                  <a href="/products/<%= maxPage - (maxPage-1) %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li><a href="/products/<%= parseInt(currentPage)-1 %>"><%= parseInt(currentPage)-1 %></a></li>
+                <li class="active"><a href="/products/<%= parseInt(currentPage) %>"><%= parseInt(currentPage) %></a></li>
+                <li><a href="/products/<%= parseInt(currentPage)+1 %>"><%= parseInt(currentPage)+1 %></a></li>
+                <li>
+                <a href="/products/<%= maxPage %>" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+                </li>
+            <% } %>
+            </ul>
+          </nav>
+          
+          </div>
+          <% } %>
+          
+          </div>
+          
+          <% }else{ %>
+          <div class="panel-body">
+          <p>Немате додадено производи, искористете ја формата за да додадете нов производ.</p>
+          </div>
+          </div>
+          <% } %>
+        
+        <% }else{ %>
+        <div class="panel-body">
+          <p>Надвор сте од опсегот на продукти, вратете се на почетната страна.</p>
+          <a href="/products/1">Врати се на почетна</a>
+          </div>
+        </div>
+        <% } %>
+        
+        
+        
+        
+        <br/>
+        <div class="panel panel-default">
+
+        <div class="panel-heading">
+          <h4><i class="fa fa-list"></i> Преглед на трошоци</h4>
+          </div>
+          
+          <% vkupno = 0 %>
+              <% if (products.length>0) { %>
+              <% for(var i=0; i < products.length; i++) { %>
+                <% vkupno = vkupno + parseFloat(products[i].cena); %>
+              <% } %>
+              <% } %>
+            <div class="panel-body">  
+            <h4>Вкупно потрошено: <%= vkupno.toFixed(2) %> МКД за <%= products.length %> продукти</h4>
+            </div>
+          </div>
+          
+          <% if (products.length>0) { %>
+          
+          <div class="row">
+              <div class="col-sm-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">Последните 5 купени продукти</div>
+                  <div class="panel-body">
+                    
+                    <div id="posledni-proizvodi" style="height: 350px;"></div>
+                    
+                  </div>
+                </div>
+              </div>
+          
+              <div class="col-sm-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">Најскапи 5 купени продукти</div>
+                  <div class="panel-body">
+                    
+                    <div id="najskapi-proizvodi" style="height: 350px;"></div>
+                    
+                  </div>
+                </div>
+              </div>
+          </div>
+          <% } %>
+          
+        <hr/>
+        <a href="" data-toggle="modal" data-target="#myModal" class="btn btn-default-red">Избриши го профилот</a>
+
+        </div>
+        
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header"><h4 class="modal-title"><strong>Избриши го профилот</strong></h4></div>
+            <div class="modal-body">
+              <p><strong>Акцијата е неповратна!</strong></p>
+              <p><strong>Твоите продукти ќе бидат исто така избришани.</strong></p>
+              <p>Дали сте сигурни дека сакате да го избришите вашиот профил?</p>
+            </div>
+            <div class="modal-footer">
+              <a href="/remove/user" type="button" class="btn btn-default">Да, сигурен сум!</a>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Не</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      
+<%- include('partials/footer.ejs') %>

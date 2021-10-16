@@ -1,0 +1,45 @@
+<%- include('partials/header.ejs') %>
+<div class="col-md-6">
+<body>    
+    
+    <div class="col-md-8 col-md-push-2" style="margin:24% 0px;">
+        <% if (message) { %>
+        <div class="alert alert-info" role="alert"><%= message %></div>
+        <% } %>
+
+        <form action="/" method="post" enctype="multipart/form-data" onsubmit="return loginvalidation()">
+         <label for="username">Корисничко име:</label>
+         <div class="form-group" id="username-group">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Внеси корисничко име" autocomplete="off" />
+            <div id="username-feedback"></div>
+         </div>
+         <label for="password">Лозинка:</label>
+         <div class="form-group" id="password-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Внеси лозинка" />
+            <div id="password-feedback"></div>
+         </div>
+
+            <div class="material-switch pull-right">
+                            <input type="checkbox" id="najava" name="najava">
+                            <label for="najava" class="label-primary"></label>
+            </div>
+               Задржи ме најавен
+        
+        <div class="row">
+            <br/>
+            <div class="col-sm-6 col-md-12 col-lg-6">
+            <input type="submit" class="btn btn-default btn-block" value="Најави се" /></div>
+            <div class="col-sm-6 col-md-12 col-lg-6">
+            <a href="/signup" class="btn btn-default btn-block">Креирај профил</a></div>
+        </div>
+
+        </form>
+
+    </div>
+      
+</div>      
+<div class="col-md-6 fixed-right hidden-xs hidden-sm" style="background-image:url('public/images/background.png'); background-attachment: fixed; background-size: cover;" align="center">
+        <div style="height:200px"></div>
+    </div>
+
+<%- include('partials/footer.ejs') %>
