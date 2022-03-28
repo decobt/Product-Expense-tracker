@@ -43,8 +43,8 @@ DB=Your_database
 
 ## Screenshots
 
-![App Screenshot](https://raw.githubusercontent.com/decobt/Product-Expense-tracker/master/screenshots/image1.jpg)
+![App Screenshot](https://raw.githubusercontent.com/decobt/Product-Expense-tracker/master/screenshots/image1.png)
 
-![App Screenshot](https://raw.githubusercontent.com/decobt/Product-Expense-tracker/master/screenshots/image2.jpg)
+![App Screenshot](https://raw.githubusercontent.com/decobt/Product-Expense-tracker/master/screenshots/image2.png)
 
-![App Screenshot](https://raw.githubusercontent.com/decobt/Product-Expense-tracker/master/screenshots/image3.jpg)
+![App Screenshot](https://raw.githubusercontent.com/decobt/Product-Expense-tracker/master/screenshots/image3.png)
